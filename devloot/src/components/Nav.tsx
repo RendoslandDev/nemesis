@@ -56,7 +56,7 @@ const Nav: React.FC = () => {
             </>
           ) : (
             <>
-              <Link to="/login" className=" block font-mono text-xs border border-border text-muted px-4 py-2 hover:border-ink hover:text-ink transition-colors">
+              <Link to="/login" className="hidden md:block font-mono text-xs border border-border text-muted px-4 py-2 hover:border-ink hover:text-ink transition-colors">
                 Sign in
               </Link>
               <Link to="/#subscribe" className="bg-ink text-cream text-xs font-mono tracking-wider px-4 py-2 hover:bg-dim transition-colors">
