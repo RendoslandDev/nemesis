@@ -3,9 +3,7 @@ import { Issue } from "../models/issue";
 import { Subscriber } from "../models/subscriber";
 
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT ?? 465),
-  secure: process.env.SMTP_SECURE === "true",
+  service: "gmail",
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
@@ -42,11 +40,11 @@ function baseLayout(content: string): string {
 <body>
   <div class="wrap">
     <div class="header">
-      <a href="${BASE_URL}" class="logo">DEV<span>LETTER</span></a>
+      <a href="${BASE_URL}" class="logo">DEV<span>LOOT</span></a>
     </div>
     <div class="body">${content}</div>
     <div class="footer">
-      <p>© 2025 DevLetter · <a href="#">Unsubscribe</a> · <a href="${BASE_URL}">Read online</a></p>
+      <p>© 2025 DevLoot · <a href="#">Unsubscribe</a> · <a href="${BASE_URL}">Read online</a></p>
     </div>
   </div>
 </body>
@@ -69,14 +67,14 @@ export const emailService = {
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
       to: email,
-      subject: "Confirm your DevLetter subscription",
+      subject: "Confirm your DevLoot subscription",
       html,
     });
   },
 
   async sendWelcome(email: string, name?: string): Promise<void> {
     const html = baseLayout(`
-      <h1>Welcome to DevLetter${name ? `, ${name}` : ""}.</h1>
+      <h1>Welcome to DevLoot${name ? `, ${name}` : ""}.</h1>
       <p>You're in. Every Tuesday, a curated dispatch for developers who build and creators who ship — no fluff, no ads, just signal.</p>
       <p>Your first issue arrives this Tuesday. In the meantime, catch up on the archive:</p>
       <p style="margin:32px 0">
@@ -86,7 +84,7 @@ export const emailService = {
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
       to: email,
-      subject: "You're in — welcome to DevLetter",
+      subject: "You're in — welcome to DevLoot",
       html,
     });
   },
@@ -100,7 +98,7 @@ export const emailService = {
     const tagsHtml = issue.tags.map((t) => `<span class="tag">${t}</span>`).join("");
 
     const html = baseLayout(`
-      <div class="meta">Issue #${issue.number} · ${new Date(issue.published_at!).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})} · ${issue.read_time} read</div>
+      <div class="meta">Issue #${issue.number} · ${new Date(issue.published_at!).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })} · ${issue.read_time} read</div>
       <h1>${issue.title}</h1>
       <p><em>${issue.excerpt}</em></p>
       <div style="margin:8px 0 28px">${tagsHtml}</div>
@@ -108,7 +106,7 @@ export const emailService = {
         <a href="${issueUrl}" class="btn">Read full issue →</a>
       </p>
       <hr style="border:none;border-top:1px solid #DDD9D2;margin:32px 0" />
-      <p style="font-size:13px;color:#aaa">You're receiving this because you subscribed at devletter.io. 
+      <p style="font-size:13px;color:#aaa">You're receiving this because you subscribed at devloot.io.
         <a href="${BASE_URL}/unsubscribe?token=UNSUBSCRIBE_TOKEN" style="color:#aaa">Unsubscribe</a>
       </p>
     `);

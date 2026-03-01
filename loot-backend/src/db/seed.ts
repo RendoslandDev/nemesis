@@ -5,13 +5,13 @@ async function seed() {
   console.log("🌱 Seeding database...");
 
   // Admin author
-  const hash = await bcrypt.hash("devletter123", 12);
+  const hash = await bcrypt.hash("Migraine69$", 12);
   const { rows: [author] } = await query<{ id: string }>(
     `INSERT INTO authors (name, email, password_hash, bio, twitter, role)
      VALUES ($1,$2,$3,$4,$5,'admin')
      ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name
      RETURNING id`,
-    ["Alex Mercer", "alex@devletter.io", hash, "Editor-in-chief. 10 years building software products.", "@alexmercer_dev"]
+    ["Rendosland Agyapong", "rendosland@devloot.io", hash, "Editor-in-chief. 2 years building software products.", "@codelessgen"]
   );
 
   // Sample issue
@@ -28,7 +28,7 @@ async function seed() {
      VALUES ($1,$2,$3,$4,$5,$6,$7,'published',true,$8,now())
      ON CONFLICT (number) DO NOTHING`,
     [
-      47,
+      1,
       "tools-that-survived-2024",
       "The tools that survived 2024 — and why we're still using them",
       "From AI coding assistants to content pipelines: a candid look at what actually stuck.",
@@ -40,7 +40,7 @@ async function seed() {
   );
 
   // Sample subscribers
-  const emails = ["demo@example.com", "test@devletter.io"];
+  const emails = ["codeeditors41@gmail.com.com", "agyapongchicken@gmail.com"];
   for (const email of emails) {
     await query(
       `INSERT INTO subscribers (email, status, confirmed_at, source)
