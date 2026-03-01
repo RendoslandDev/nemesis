@@ -15,7 +15,7 @@ async function start() {
 
   const server = app.listen(PORT, () => {
     console.log(`🚀 DevLetter API running on http://localhost:${PORT}`);
-    console.log(`   ENV: ${process.env.NODE_ENV ?? "development"}`);
+    console.log(`   ENV: ${process.env.NODE_ENV ?? "production"}`);
   });
 
   // Graceful shutdown

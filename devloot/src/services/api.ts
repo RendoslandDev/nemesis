@@ -1,5 +1,5 @@
 
-const BASE = import.meta.env.VITE_API_URL ?? "";
+const BASE = import.meta.env.VITE_API_URL ?? "https://lootbackend.onrender.com";
 
 // ── Types ────────────────────────────────────────────────────────────────
 

@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const BASE_URL = process.env.FRONTEND_URL ?? "http://localhost:5173";
+const BASE_URL = process.env.FRONTEND_URL ?? "https://devloot.onrender.com";
 
 // ── HTML templates ────────────────────────────────────────────────────────
 
