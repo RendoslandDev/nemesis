@@ -1,4 +1,4 @@
-import { Pool } from "pg";
+import { Pool, QueryResult } from "pg";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -15,8 +15,10 @@ pool.on("error", (err) => {
   process.exit(-1);
 });
 
-export const query = <T = any>(text: string, params?: any[]): Promise<{ rows: T[]; rowCount: number | null }> =>
-  pool.query(text, params);
+export const query = async <T = any>(text: string, params?: any[]): Promise<{ rows: T[]; rowCount: number | null }> => {
+  const result: QueryResult = await pool.query(text, params);
+  return result as unknown as { rows: T[]; rowCount: number | null };
+};
 
 export const getClient = () => pool.connect();
 
