@@ -1,7 +1,7 @@
 {
-  "name": "devletter-api",
+  "name": "devloot",
   "version": "1.0.0",
-  "description": "DevLetter production API",
+  "description": "DevLoot production API",
   "main": "dist/server.js",
   "private": true,
   "scripts": {
