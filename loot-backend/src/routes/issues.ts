@@ -10,7 +10,6 @@ import { query } from "../config/db";
 
 const router = Router();
 
-// ── Schemas ─────────────────────────────────────────────────────────────
 const createIssueSchema = z.object({
   title: z.string().min(5).max(300),
   excerpt: z.string().min(10).max(500),
@@ -27,16 +26,13 @@ const paginationSchema = z.object({
   offset: z.coerce.number().min(0).default(0),
 });
 
-// ── Public routes ────────────────────────────────────────────────────────
 
-// GET /issues — list published
 router.get("/", validate(paginationSchema, "query"), async (req: Request, res: Response) => {
   const { limit, offset } = req.query as any;
   const result = await issueService.getPublished(limit, offset);
   res.json(result);
 });
 
-// ── Admin: list all (any status) — must be before /:slugOrId ─────────────
 router.get("/admin/all", requireAdmin, validate(paginationSchema, "query"), async (req: Request, res: Response) => {
   const { limit, offset } = req.query as any;
   const status = req.query.status as string | undefined;
@@ -44,7 +40,7 @@ router.get("/admin/all", requireAdmin, validate(paginationSchema, "query"), asyn
   res.json(result);
 });
 
-// GET /issues/:slugOrId — single published issue by slug or UUID
+
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 router.get("/:slugOrId", async (req: Request, res: Response) => {
@@ -65,9 +61,7 @@ router.get("/:slugOrId", async (req: Request, res: Response) => {
   res.json(issue);
 });
 
-// ── Authenticated routes ─────────────────────────────────────────────────
 
-// POST /issues — create
 router.post("/", requireAuth, validate(createIssueSchema), async (req: Request, res: Response) => {
   const issue = await issueService.create({
     ...req.body,
@@ -76,7 +70,7 @@ router.post("/", requireAuth, validate(createIssueSchema), async (req: Request, 
   res.status(201).json(issue);
 });
 
-// PATCH /issues/:id — update
+
 router.patch("/:id", requireAuth, validate(createIssueSchema.partial()), async (req: Request, res: Response) => {
   const existing = await issueService.findById(req.params.id);
   if (!existing) throw new AppError(404, "Issue not found");
@@ -89,14 +83,13 @@ router.patch("/:id", requireAuth, validate(createIssueSchema.partial()), async (
   res.json(updated);
 });
 
-// DELETE /issues/:id — admin only
 router.delete("/:id", requireAdmin, async (req: Request, res: Response) => {
   const deleted = await issueService.delete(req.params.id);
   if (!deleted) throw new AppError(404, "Issue not found");
   res.status(204).send();
 });
 
-// ── POST /issues/:id/send — send to all active subscribers (admin) ───────
+
 router.post("/:id/send", requireAdmin, async (req: Request, res: Response) => {
   const issue = await issueService.findById(req.params.id);
   if (!issue) throw new AppError(404, "Issue not found");

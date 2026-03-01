@@ -47,22 +47,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compression() as any);
 
-// ── Logging ───────────────────────────────────────────────────────────────
 if (process.env.NODE_ENV !== "test") {
   app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 }
 
-// ── Health check ──────────────────────────────────────────────────────────
+
 app.get("/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString(), env: process.env.NODE_ENV });
 });
 
-// ── Routes ────────────────────────────────────────────────────────────────
 app.use("/api/auth", authRouter);
 app.use("/api/issues", issuesRouter);
 app.use("/api/subscribers", subscribeLimiter, subscribersRouter);
 
-// ── Error handling ────────────────────────────────────────────────────────
 app.use(notFound);
 app.use(errorHandler);
 

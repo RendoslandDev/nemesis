@@ -48,7 +48,6 @@ router.post("/login", validate(loginSchema), async (req: Request, res: Response)
   });
 });
 
-// POST /auth/register (admin only in production — open for initial setup)
 router.post("/register", validate(registerSchema), async (req: Request, res: Response) => {
   const { name, email, password, bio, twitter } = req.body;
 
@@ -77,7 +76,6 @@ router.post("/register", validate(registerSchema), async (req: Request, res: Res
   res.status(201).json({ token, author });
 });
 
-// GET /auth/me
 router.get("/me", requireAuth, async (req: Request, res: Response) => {
   const { rows } = await query(
     "SELECT id, name, email, bio, twitter, role, avatar_url, created_at FROM authors WHERE id = $1",

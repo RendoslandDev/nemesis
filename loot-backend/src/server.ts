@@ -4,7 +4,7 @@ import pool from "./config/db";
 const PORT = Number(process.env.PORT ?? 3001);
 
 async function start() {
-  // Test DB connection
+
   try {
     await pool.query("SELECT 1");
     console.log("✅ Database connected");
@@ -18,7 +18,7 @@ async function start() {
     console.log(`   ENV: ${process.env.NODE_ENV ?? "development"}`);
   });
 
-  // Graceful shutdown
+// i will make gracefull shoutdown
   const shutdown = async (signal: string) => {
     console.log(`\n${signal} received. Shutting down gracefully...`);
     server.close(async () => {

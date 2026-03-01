@@ -8,7 +8,7 @@ import { AppError } from "../middleware/errorHandler";
 
 const router = Router();
 
-// ── POST /subscribers — public subscribe ────────────────────────────────
+
 const subscribeSchema = z.object({
   email: z.string().email("Invalid email address"),
   name: z.string().max(100).optional(),
@@ -25,14 +25,14 @@ router.post("/", validate(subscribeSchema), async (req: Request, res: Response) 
       return;
     }
     if (existing.status === "unsubscribed") {
-      // Re-subscribe: create new confirm token and resend
+
       await subscriberService.create(email, name, source);
     }
   }
 
   const subscriber = existing ?? (await subscriberService.create(email, name, source));
 
-  // Fire-and-forget confirmation email
+
   if ((subscriber as any).confirm_token) {
     emailService
       .sendConfirmation(subscriber.email, (subscriber as any).confirm_token)
@@ -45,7 +45,6 @@ router.post("/", validate(subscribeSchema), async (req: Request, res: Response) 
   });
 });
 
-// ── GET /subscribers/confirm?token=xxx ─────────────────────────────────
 router.get("/confirm", async (req: Request, res: Response) => {
   const token = String(req.query.token ?? "");
   if (!token) throw new AppError(400, "Missing confirmation token");
@@ -58,7 +57,6 @@ router.get("/confirm", async (req: Request, res: Response) => {
   res.json({ message: "Subscription confirmed! Welcome to DevLetter." });
 });
 
-// ── GET /subscribers/unsubscribe?token=xxx ──────────────────────────────
 router.get("/unsubscribe", async (req: Request, res: Response) => {
   const token = String(req.query.token ?? "");
   if (!token) throw new AppError(400, "Missing unsubscribe token");
@@ -69,9 +67,6 @@ router.get("/unsubscribe", async (req: Request, res: Response) => {
   res.json({ message: "You've been unsubscribed. Sorry to see you go." });
 });
 
-// ── Admin routes ────────────────────────────────────────────────────────
-
-// GET /subscribers — list all (admin)
 router.get("/", requireAdmin, async (req: Request, res: Response) => {
   const limit = Math.min(Number(req.query.limit ?? 50), 200);
   const offset = Number(req.query.offset ?? 0);
@@ -81,7 +76,6 @@ router.get("/", requireAdmin, async (req: Request, res: Response) => {
   res.json(result);
 });
 
-// GET /subscribers/stats — aggregate stats (admin)
 router.get("/stats", requireAdmin, async (_req: Request, res: Response) => {
   const stats = await subscriberService.getStats();
   res.json(stats);

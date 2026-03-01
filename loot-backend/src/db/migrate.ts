@@ -1,7 +1,7 @@
 import { query } from "../config/db";
 
 const migrations = [
-  // ─── Subscribers ───────────────────────────────────────────────────
+
   `CREATE TABLE IF NOT EXISTS subscribers (
     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email       TEXT NOT NULL UNIQUE,
@@ -21,7 +21,6 @@ const migrations = [
   `CREATE INDEX IF NOT EXISTS idx_subscribers_status ON subscribers(status)`,
   `CREATE INDEX IF NOT EXISTS idx_subscribers_confirm_token ON subscribers(confirm_token)`,
 
-  // ─── Authors ───────────────────────────────────────────────────────
   `CREATE TABLE IF NOT EXISTS authors (
     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name        TEXT NOT NULL,
@@ -36,7 +35,7 @@ const migrations = [
     updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
   )`,
 
-  // ─── Issues ────────────────────────────────────────────────────────
+
   `CREATE TABLE IF NOT EXISTS issues (
     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     number      INT NOT NULL UNIQUE,
@@ -64,7 +63,7 @@ const migrations = [
   `CREATE INDEX IF NOT EXISTS idx_issues_slug ON issues(slug)`,
   `CREATE INDEX IF NOT EXISTS idx_issues_published_at ON issues(published_at DESC)`,
 
-  // ─── Email sends (audit log) ────────────────────────────────────────
+
   `CREATE TABLE IF NOT EXISTS email_sends (
     id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     issue_id      UUID NOT NULL REFERENCES issues(id) ON DELETE CASCADE,
@@ -80,7 +79,6 @@ const migrations = [
   `CREATE INDEX IF NOT EXISTS idx_email_sends_issue ON email_sends(issue_id)`,
   `CREATE INDEX IF NOT EXISTS idx_email_sends_subscriber ON email_sends(subscriber_id)`,
 
-  // ─── Updated_at triggers ───────────────────────────────────────────
   `CREATE OR REPLACE FUNCTION update_updated_at()
    RETURNS TRIGGER AS $$
    BEGIN NEW.updated_at = now(); RETURN NEW; END;

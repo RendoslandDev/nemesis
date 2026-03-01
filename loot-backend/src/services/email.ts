@@ -12,7 +12,6 @@ const transporter = nodemailer.createTransport({
 
 const BASE_URL = process.env.FRONTEND_URL ?? "https://devloot.onrender.com";
 
-// ── HTML templates ────────────────────────────────────────────────────────
 
 function baseLayout(content: string): string {
   return `<!DOCTYPE html>
@@ -50,8 +49,6 @@ function baseLayout(content: string): string {
 </body>
 </html>`;
 }
-
-// ── Email service methods ─────────────────────────────────────────────────
 
 export const emailService = {
   async sendConfirmation(email: string, token: string): Promise<void> {
@@ -111,7 +108,7 @@ export const emailService = {
       </p>
     `);
 
-    // In production, use a proper queue. This is a simple sequential send.
+   
     for (const subscriber of subscribers) {
       try {
         const personalizedHtml = html.replace(

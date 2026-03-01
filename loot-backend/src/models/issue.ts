@@ -40,7 +40,7 @@ export interface CreateIssueInput {
 
 export const issueService = {
   async create(input: CreateIssueInput): Promise<Issue> {
-    // Auto-increment issue number
+  
     const { rows: [{ max }] } = await query<{ max: string }>("SELECT COALESCE(MAX(number),0) as max FROM issues");
     const number = parseInt(max) + 1;
     const slug = slugify(input.title, { lower: true, strict: true });

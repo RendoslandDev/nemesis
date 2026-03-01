@@ -14,7 +14,7 @@ async function seed() {
     ["Rendosland Agyapong", "rendosland@devloot.io", hash, "Editor-in-chief. 2 years building software products.", "@codelessgen"]
   );
 
-  // Sample issue
+
   const content = [
     { type: "intro", text: "Every January I do a purge. I go through every app, extension, and subscription and ask: did this actually make me better?" },
     { type: "h2", text: "The survivors from the AI wave" },
