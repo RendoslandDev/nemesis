@@ -1,7 +1,6 @@
 
 const BASE = import.meta.env.VITE_API_URL ?? "https://lootbackend.onrender.com";
 
-// ── Types ────────────────────────────────────────────────────────────────
 
 export interface ApiIssue {
   id: string;
@@ -67,7 +66,6 @@ export interface ApiError {
   errors?: { field: string; message: string }[];
 }
 
-// ── Core fetch helper ────────────────────────────────────────────────────
 
 async function request<T>(
   path: string,
@@ -91,7 +89,6 @@ async function request<T>(
   return res.json();
 }
 
-// ── Auth ─────────────────────────────────────────────────────────────────
 
 export const authApi = {
   login: (email: string, password: string) =>
@@ -109,8 +106,6 @@ export const authApi = {
   me: (token: string) =>
     request<Author>("/api/auth/me", {}, token),
 };
-
-// ── Issues ───────────────────────────────────────────────────────────────
 
 export const issuesApi = {
   list: (limit = 20, offset = 0) =>
@@ -154,7 +149,6 @@ export const issuesApi = {
     ),
 };
 
-// ── Subscribers ──────────────────────────────────────────────────────────
 
 export const subscribersApi = {
   subscribe: (email: string, name?: string) =>

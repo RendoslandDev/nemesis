@@ -9,7 +9,7 @@ type StatusFilter = "all" | "draft" | "published" | "scheduled";
 const STATUS_COLORS: Record<string, string> = {
   published: "bg-accent text-ink",
   draft:     "border border-border text-muted",
-  scheduled: "border border-ink text-ink",
+  scheduled: "border border-ink text-ink bg-cream",
 };
 
 const AdminPage: React.FC = () => {

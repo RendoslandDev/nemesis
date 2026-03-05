@@ -51,7 +51,7 @@ const values = [
 const AboutPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-cream pt-20">
-      {/* Hero */}
+
       <section className="border-b border-border">
         <div className="max-w-6xl mx-auto px-8 py-20 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div>
@@ -82,7 +82,7 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Values */}
+
       <section id="values" className="bg-ink text-cream border-b border-ink">
         <div className="max-w-6xl mx-auto px-8 py-20">
           <span className="font-mono text-xs tracking-widest uppercase text-cream/40 mb-6 block">
@@ -113,7 +113,7 @@ const AboutPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {team.map((member) => (
               <div key={member.name} className="border border-border p-8 hover:bg-white transition-colors group">
-                {/* Avatar placeholder */}
+               
                 <div className="w-12 h-12 bg-ink flex items-center justify-center font-display text-xl text-cream mb-6 group-hover:bg-dim transition-colors">
                   {member.name[0]}
                 </div>

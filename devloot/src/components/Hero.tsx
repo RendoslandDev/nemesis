@@ -72,7 +72,7 @@ const Hero: React.FC = () => {
           </div>
         </div>
 
-        {/* Right — latest issue card */}
+
         <div
           className="animate-fade-up delay-400 relative"
           style={{ animationDelay: "400ms" }}
@@ -108,7 +108,7 @@ const Hero: React.FC = () => {
         </div>
       </div>
 
-      {/* Stats bar */}
+
       <div
         className="animate-fade-up delay-500 border-t border-border pt-8 pb-16 grid grid-cols-3 md:grid-cols-4 gap-8"
         style={{ animationDelay: "500ms" }}
@@ -126,6 +126,7 @@ const Hero: React.FC = () => {
         ))}
       </div>
     </section>
+    // {featuring my matter nemesis in the hero section, because why not?}
   );
 };
 
