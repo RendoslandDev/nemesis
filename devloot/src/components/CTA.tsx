@@ -1,16 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
+import SubscribeForm from "./SubscribeForm";
 
 const CTA: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) setSubmitted(true);
-  };
-
   return (
-    <section className="px-8 py-32 bg-cream border-t border-border">
+    <section id="subscribe" className="px-8 py-32 bg-cream border-t border-border">
       <div className="max-w-3xl mx-auto text-center">
         <span className="tag text-muted mb-6 inline-block">Ready?</span>
         <h2 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] leading-tight text-ink mb-6">
@@ -21,8 +14,14 @@ const CTA: React.FC = () => {
           Join 12,000 developers and creators who start their week with DevLetter.
           Free, forever. No spam. Unsubscribe in one click.
         </p>
-
-        {!submitted ? (
+  <div className="flex justify-center">
+        <SubscribeForm
+          inputClassName="bg-white sm:border-r-0 py-3.5"
+          buttonClassName="px-8 py-3.5"
+          center
+        />
+        </div>
+        {/* {!submitted ? (
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-0 max-w-md mx-auto">
             <input
               type="email"
@@ -44,8 +43,9 @@ const CTA: React.FC = () => {
             <span className="w-2 h-2 rounded-full bg-accent" />
             <p className="font-mono text-sm text-ink">Welcome aboard. Issue #048 drops Tuesday.</p>
           </div>
-        )}
-      </div>
+        )}*/}
+
+      </div> 
     </section>
   );
 };
