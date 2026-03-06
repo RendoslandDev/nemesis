@@ -55,7 +55,7 @@ export const emailService = {
     const confirmUrl = `${BASE_URL}/confirm?token=${token}`;
     const html = baseLayout(`
       <h1>Confirm your subscription</h1>
-      <p>You're one click away from joining 12,000+ developers and creators who read DevLetter every Tuesday.</p>
+      <p>You're one click away from joining 12,000+ developers and creators who read DevLoot every Tuesday.</p>
       <p style="margin:32px 0">
         <a href="${confirmUrl}" class="btn">Confirm subscription →</a>
       </p>

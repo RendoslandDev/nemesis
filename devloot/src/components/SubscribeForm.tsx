@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { subscribersApi } from "../services/api";
 
-type FormState = "idle" | "loading" | "success" | "error";
+type FormState = "idle" | "loading" | "success" | "already" | "error";
 
 interface SubscribeFormProps {
   className?: string;
@@ -17,8 +17,8 @@ const SubscribeForm: React.FC<SubscribeFormProps> = ({
   successMessage,
   center = false,
 }) => {
-  const [email, setEmail] = useState("");
-  const [state, setState] = useState<FormState>("idle");
+  const [email, setEmail]   = useState("");
+  const [state, setState]   = useState<FormState>("idle");
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -27,8 +27,10 @@ const SubscribeForm: React.FC<SubscribeFormProps> = ({
     setState("loading");
     try {
       const res = await subscribersApi.subscribe(email);
+      // Backend returns 200 + "already subscribed" message for existing active subs
+      const isAlready = res.message.toLowerCase().includes("already");
       setMessage(res.message);
-      setState("success");
+      setState(isAlready ? "already" : "success");
       setEmail("");
     } catch (err: any) {
       setMessage(err.message ?? "Something went wrong. Please try again.");
@@ -36,15 +38,34 @@ const SubscribeForm: React.FC<SubscribeFormProps> = ({
     }
   };
 
+  // ── Success: new subscriber ──────────────────────────────────────────────
   if (state === "success") {
     return (
-      <div className={`flex items-center gap-3 ${center ? "justify-center" : ""}`}>
-        <span className="w-2 h-2 rounded-full bg-accent shrink-0" />
-        <p className="font-mono text-sm text-ink">{message}</p>
+      <div className={`flex items-start gap-3 max-w-md ${center ? "justify-center" : ""}`}>
+        <span className="w-2 h-2 rounded-full bg-accent shrink-0 mt-1" />
+        <div>
+          <p className="font-mono text-sm text-ink">
+            {successMessage ?? message}
+          </p>
+          <p className="font-mono text-xs text-muted/60 mt-1">
+            Check your inbox (and spam folder) for a confirmation email.
+          </p>
+        </div>
       </div>
     );
   }
 
+  // ── Already subscribed ───────────────────────────────────────────────────
+  if (state === "already") {
+    return (
+      <div className={`flex items-start gap-3 max-w-md ${center ? "justify-center" : ""}`}>
+        <span className="w-2 h-2 rounded-full bg-border shrink-0 mt-1" />
+        <p className="font-mono text-sm text-muted">{message}</p>
+      </div>
+    );
+  }
+
+  // ── Form ─────────────────────────────────────────────────────────────────
   return (
     <div>
       <form onSubmit={handleSubmit} className="flex gap-0 max-w-md">
@@ -62,9 +83,18 @@ const SubscribeForm: React.FC<SubscribeFormProps> = ({
           disabled={state === "loading"}
           className={`bg-ink text-cream font-mono text-xs tracking-widest uppercase px-6 py-3 hover:bg-dim transition-colors whitespace-nowrap disabled:opacity-60 disabled:cursor-wait ${buttonClassName}`}
         >
-          {state === "loading" ? "..." : "Subscribe →"}
+          {state === "loading" ? (
+            <span className="inline-flex items-center gap-1.5">
+              <span className="w-1 h-1 rounded-full bg-cream/60 animate-bounce" style={{ animationDelay: "0ms" }} />
+              <span className="w-1 h-1 rounded-full bg-cream/60 animate-bounce" style={{ animationDelay: "150ms" }} />
+              <span className="w-1 h-1 rounded-full bg-cream/60 animate-bounce" style={{ animationDelay: "300ms" }} />
+            </span>
+          ) : (
+            "Subscribe →"
+          )}
         </button>
       </form>
+
       {state === "error" && (
         <p className="mt-2 font-mono text-xs text-red-500">{message}</p>
       )}
