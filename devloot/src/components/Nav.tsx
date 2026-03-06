@@ -3,8 +3,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Nav: React.FC = () => {
-  const [scrolled, setScrolled]   = useState(false);
-  const [menuOpen, setMenuOpen]   = useState(false);
+const [scrolled, setScrolled]         = useState(false);
+  const [menuOpen, setMenuOpen]         = useState(false);
+  const [pendingScroll, setPendingScroll] = useState(false);
   const location                  = useLocation();
   const navigate                  = useNavigate();
   const { isAuthed, isAdmin, author, logout } = useAuth();
@@ -18,18 +19,49 @@ const Nav: React.FC = () => {
   // Close mobile menu on route change
   useEffect(() => { setMenuOpen(false); }, [location.pathname]);
 
+  // Once we've landed on "/", execute the pending scroll
+  useEffect(() => {
+    if (pendingScroll && location.pathname === "/") {
+      setPendingScroll(false);
+      // Small delay lets the page fully render before scrolling
+      const id = setTimeout(() => {
+        document.getElementById("subscribe")?.scrollIntoView({ behavior: "smooth" });
+      }, 300);
+      return () => clearTimeout(id);
+    }
+  }, [location.pathname, pendingScroll]);
+
   const handleSubscribe = (e: React.MouseEvent) => {
     e.preventDefault();
     if (location.pathname === "/") {
       document.getElementById("subscribe")?.scrollIntoView({ behavior: "smooth" });
     } else {
+      setPendingScroll(true);
       navigate("/");
-      // Wait for navigation then scroll
-      setTimeout(() => {
-        document.getElementById("subscribe")?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
     }
   };
+
+  // useEffect(() => {
+  //   const handleScroll = () => setScrolled(window.scrollY > 20);
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
+
+  // // Close mobile menu on route change
+  // useEffect(() => { setMenuOpen(false); }, [location.pathname]);
+
+  // const handleSubscribe = (e: React.MouseEvent) => {
+  //   e.preventDefault();
+  //   if (location.pathname === "/") {
+  //     document.getElementById("subscribe")?.scrollIntoView({ behavior: "smooth" });
+  //   } else {
+  //     navigate("/");
+  //     // Wait for navigation then scroll
+  //     setTimeout(() => {
+  //       document.getElementById("subscribe")?.scrollIntoView({ behavior: "smooth" });
+  //     }, 100);
+  //   }
+  // };
 
   const navLink = (to: string, label: string) => (
     <Link
