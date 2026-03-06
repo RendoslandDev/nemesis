@@ -1,13 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { issuesApi, ApiIssue } from "../services/api";
+import SubscribeForm from "./SubscribeForm";
 
 const Hero: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const navigate = useNavigate();
+  const [latestIssue, setLatestIssue] = useState<ApiIssue | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) setSubmitted(true);
-  };
+
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (email) setSubmitted(true);
+  // };
+
+  useEffect(() => {
+    issuesApi.list(0 ,1).then(({ issues }) => {
+      if(issues[0]) setLatestIssue(issues[0]);
+    }).catch(() => {});
+  }, []);
 
   return (
     <section className="min-h-screen flex flex-col justify-center pt-20 px-8 max-w-6xl mx-auto">
@@ -36,8 +46,14 @@ const Hero: React.FC = () => {
             Curated every Tuesday — developer tools, creator strategies, indie hacker
             insights, and the things worth reading this week. No noise. Just signal.
           </p>
+          <div className="animate-fade-up mt-10" style={{ animationDelay: "300ms" }}>
+            <SubscribeForm />
+            <p className="mt-3 font-mono text-xs text-muted/60">
+              Join developers &amp; creators. Unsubscribe anytime.
+            </p>
+          </div>
 
-          <div
+          {/* <div
             className="animate-fade-up delay-300 mt-10"
             style={{ animationDelay: "300ms" }}
           >
@@ -51,7 +67,7 @@ const Hero: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   className="subscribe-input flex-1 border border-border border-r-0 bg-transparent px-4 py-3 font-mono text-sm text-ink placeholder:text-muted/50 focus:outline-none focus:border-ink transition-colors"
                 />
-                <button
+                <button 
                   type="submit"
                   className="bg-ink text-cream font-mono text-xs tracking-widest uppercase px-6 py-3 hover:bg-dim transition-colors whitespace-nowrap"
                 >
@@ -69,11 +85,11 @@ const Hero: React.FC = () => {
             <p className="mt-3 font-mono text-xs text-muted/60">
               Join 12,000+ developers & creators. Unsubscribe anytime.
             </p>
-          </div>
-        </div>
+          </div> */}
+        </div> 
 
 
-        <div
+        {/* <div
           className="animate-fade-up delay-400 relative"
           style={{ animationDelay: "400ms" }}
         >
@@ -106,6 +122,50 @@ const Hero: React.FC = () => {
             </div>
           </div>
         </div>
+      </div> */}
+          {/* Right — latest issue card */}
+        <div className="animate-fade-up relative" style={{ animationDelay: "400ms" }}>
+          <div className="absolute -top-4 -left-4 w-full h-full border border-border" />
+          <div className="relative bg-white border border-border p-8">
+            {latestIssue ? (
+              <>
+                <div className="flex items-center justify-between mb-6">
+                  <span className="tag">Latest issue #{latestIssue.number}</span>
+                  <span className="font-mono text-xs text-muted">
+                    {latestIssue.published_at
+                      ? new Date(latestIssue.published_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+                      : ""}
+                  </span>
+                </div>
+                <h2 className="font-display text-2xl leading-snug mb-4">{latestIssue.title}</h2>
+                <p className="text-sm text-muted leading-relaxed mb-8">{latestIssue.excerpt}</p>
+                <div className="flex flex-wrap gap-2">
+                  {latestIssue.tags.map((tag) => (
+                    <span key={tag} className="tag text-muted">{tag}</span>
+                  ))}
+                </div>
+                <div className="mt-6 pt-6 border-t border-border flex items-center justify-between">
+                  <span className="font-mono text-xs text-muted">{latestIssue.read_time} read</span>
+                  <button
+                    onClick={() => navigate(`/read/${latestIssue.id}`)}
+                    className="font-mono text-xs text-ink flex items-center gap-2 hover:gap-3 transition-all"
+                  >
+                    Read issue <span>→</span>
+                  </button>
+                </div>
+              </>
+            ) : (
+              // Skeleton
+              <div className="animate-pulse space-y-4">
+                <div className="h-4 bg-border rounded w-1/3" />
+                <div className="h-6 bg-border rounded w-5/6" />
+                <div className="h-6 bg-border rounded w-4/6" />
+                <div className="h-4 bg-border rounded w-full" />
+                <div className="h-4 bg-border rounded w-full" />
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
 
@@ -131,3 +191,5 @@ const Hero: React.FC = () => {
 };
 
 export default Hero;
+
+
